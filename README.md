@@ -47,5 +47,6 @@ firefly:
 ```
 
 ## Notes
-- SignatureProvider enum currently uses OTHER for Logalty; consider adding a LOGALTY entry in lib-ecm-core if needed.
-- Implement mapping methods inside LogaltySignatureEnvelopeAdapter when API specs are available.
+- SignatureProvider.LOGALTY is now available in lib-ecm-core
+- Full implementation pending Logalty API documentation and credentials
+- Placeholder methods ready for actual API integration

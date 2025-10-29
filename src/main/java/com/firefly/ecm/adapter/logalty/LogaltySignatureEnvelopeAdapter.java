@@ -130,7 +130,7 @@ public class LogaltySignatureEnvelopeAdapter implements SignatureEnvelopePort {
                     
                     return envelope.toBuilder()
                         .id(id)
-                        .provider(SignatureProvider.OTHER) // TODO: Add LOGALTY to enum
+                        .provider(SignatureProvider.LOGALTY)
                         .status(EnvelopeStatus.DRAFT)
                         .externalEnvelopeId(logaltyRequestId)
                         .createdAt(Instant.now())
@@ -297,7 +297,7 @@ public class LogaltySignatureEnvelopeAdapter implements SignatureEnvelopePort {
     private SignatureEnvelope mapResponseToEnvelope(JsonNode node, UUID id, String logaltyRequestId) {
         return SignatureEnvelope.builder()
             .id(id)
-            .provider(SignatureProvider.OTHER) // TODO: Add LOGALTY to enum
+            .provider(SignatureProvider.LOGALTY)
             .title(node.path("title").asText(null))
             .description(node.path("message").asText(null))
             .status(mapLogaltyStatusToEnvelopeStatus(node.path("status").asText("DRAFT")))
