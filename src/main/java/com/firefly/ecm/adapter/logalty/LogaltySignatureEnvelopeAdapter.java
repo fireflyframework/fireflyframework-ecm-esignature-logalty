@@ -240,6 +240,112 @@ public class LogaltySignatureEnvelopeAdapter implements SignatureEnvelopePort {
         return Flux.empty();
     }
 
+    @Override
+    public Flux<SignatureEnvelope> getExpiringEnvelopes(Instant fromTime, Instant toTime) {
+        log.debug("Retrieving Logalty envelopes expiring between {} and {}", fromTime, toTime);
+        // Placeholder: implement query logic
+        return Flux.empty();
+    }
+
+    @Override
+    public Flux<SignatureEnvelope> getCompletedEnvelopes(Instant fromTime, Instant toTime) {
+        log.debug("Retrieving Logalty envelopes completed between {} and {}", fromTime, toTime);
+        // Placeholder: implement query logic
+        return Flux.empty();
+    }
+
+    @Override
+    public Mono<Boolean> existsEnvelope(UUID envelopeId) {
+        log.debug("Checking if Logalty envelope exists: {}", envelopeId);
+        return Mono.just(envelopeIdMapping.containsKey(envelopeId));
+    }
+
+    @Override
+    public Mono<SignatureEnvelope> getEnvelopeByExternalId(String externalEnvelopeId, SignatureProvider provider) {
+        log.debug("Retrieving Logalty envelope by external ID: {}", externalEnvelopeId);
+        UUID envelopeId = externalIdMapping.get(externalEnvelopeId);
+        if (envelopeId == null) {
+            return Mono.empty();
+        }
+        return getEnvelope(envelopeId);
+    }
+
+    @Override
+    public Mono<SignatureEnvelope> syncEnvelopeStatus(UUID envelopeId) {
+        log.debug("Syncing Logalty envelope status: {}", envelopeId);
+        // Retrieve fresh status from Logalty API
+        return getEnvelope(envelopeId);
+    }
+
+    @Override
+    public Mono<String> getSigningUrl(UUID envelopeId, String signerEmail, String signerName, String clientUserId) {
+        log.debug("Getting signing URL for envelope: {}, signer: {}", envelopeId, signerEmail);
+        
+        return ensureValidAccessToken()
+            .flatMap(token -> {
+                String logaltyRequestId = envelopeIdMapping.get(envelopeId);
+                if (logaltyRequestId == null) {
+                    return Mono.error(new RuntimeException("Envelope not found: " + envelopeId));
+                }
+                
+                // Placeholder: construct signing URL from Logalty API
+                return webClient.get()
+                    .uri("/api/{apiVersion}/signature-requests/{id}/signing-url?email={email}",
+                         properties.getApiVersion(), logaltyRequestId, signerEmail)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .retrieve()
+                    .bodyToMono(JsonNode.class)
+                    .map(response -> response.path("signingUrl").asText());
+            })
+            .transformDeferred(CircuitBreakerOperator.of(circuitBreaker))
+            .transformDeferred(RetryOperator.of(retry));
+    }
+
+    @Override
+    public Mono<Void> resendEnvelope(UUID envelopeId) {
+        log.debug("Resending Logalty envelope: {}", envelopeId);
+        
+        return ensureValidAccessToken()
+            .flatMap(token -> {
+                String logaltyRequestId = envelopeIdMapping.get(envelopeId);
+                if (logaltyRequestId == null) {
+                    return Mono.error(new RuntimeException("Envelope not found: " + envelopeId));
+                }
+                
+                return webClient.post()
+                    .uri("/api/{apiVersion}/signature-requests/{id}/resend",
+                         properties.getApiVersion(), logaltyRequestId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .retrieve()
+                    .bodyToMono(Void.class);
+            })
+            .transformDeferred(CircuitBreakerOperator.of(circuitBreaker))
+            .transformDeferred(RetryOperator.of(retry));
+    }
+
+    @Override
+    public Mono<SignatureEnvelope> archiveEnvelope(UUID envelopeId) {
+        log.debug("Archiving Logalty envelope: {}", envelopeId);
+        
+        return ensureValidAccessToken()
+            .flatMap(token -> {
+                String logaltyRequestId = envelopeIdMapping.get(envelopeId);
+                if (logaltyRequestId == null) {
+                    return Mono.error(new RuntimeException("Envelope not found: " + envelopeId));
+                }
+                
+                return webClient.post()
+                    .uri("/api/{apiVersion}/signature-requests/{id}/archive",
+                         properties.getApiVersion(), logaltyRequestId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                    .retrieve()
+                    .bodyToMono(JsonNode.class)
+                    .flatMap(response -> getEnvelope(envelopeId));
+            })
+            .transformDeferred(CircuitBreakerOperator.of(circuitBreaker))
+            .transformDeferred(RetryOperator.of(retry));
+    }
+
     /**
      * Ensures a valid OAuth access token is available.
      * Refreshes the token if expired or not present.
