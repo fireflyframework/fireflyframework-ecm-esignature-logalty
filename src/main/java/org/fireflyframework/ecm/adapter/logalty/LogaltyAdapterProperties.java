@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2024 Firefly Software Solutions Inc.
  */
-package com.firefly.ecm.adapter.logalty;
+package org.fireflyframework.ecm.adapter.logalty;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

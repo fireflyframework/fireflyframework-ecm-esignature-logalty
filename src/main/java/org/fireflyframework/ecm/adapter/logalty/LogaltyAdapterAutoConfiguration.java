@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2024 Firefly Software Solutions Inc.
  */
-package com.firefly.ecm.adapter.logalty;
+package org.fireflyframework.ecm.adapter.logalty;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
@@ -42,7 +42,7 @@ import java.time.Duration;
 @Slf4j
 @AutoConfiguration
 @EnableConfigurationProperties(LogaltyAdapterProperties.class)
-@ComponentScan(basePackages = "com.firefly.ecm.adapter.logalty")
+@ComponentScan(basePackages = "org.fireflyframework.ecm.adapter.logalty")
 @ConditionalOnProperty(name = "firefly.ecm.esignature.provider", havingValue = "logalty")
 public class LogaltyAdapterAutoConfiguration {
 

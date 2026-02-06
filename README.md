@@ -15,8 +15,8 @@ Status: Prototype (skeleton) — stubs in place ready for full API mapping.
 ### Add dependency
 ```xml
 <dependency>
-  <groupId>com.firefly</groupId>
-  <artifactId>lib-ecm-esignature-logalty</artifactId>
+  <groupId>org.fireflyframework</groupId>
+  <artifactId>fireflyframework-ecm-esignature-logalty</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 </dependency>
 ```
@@ -47,6 +47,6 @@ firefly:
 ```
 
 ## Notes
-- SignatureProvider.LOGALTY is now available in lib-ecm-core
+- SignatureProvider.LOGALTY is now available in fireflyframework-ecm-core
 - Full implementation pending Logalty API documentation and credentials
 - Placeholder methods ready for actual API integration
