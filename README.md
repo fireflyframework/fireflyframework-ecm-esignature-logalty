@@ -1,5 +1,7 @@
 # Firefly ECM eSignature - Logalty
 
+[![CI](https://github.com/fireflyframework/fireflyframework-ecm-esignature-logalty/actions/workflows/ci.yml/badge.svg)](https://github.com/fireflyframework/fireflyframework-ecm-esignature-logalty/actions/workflows/ci.yml)
+
 Logalty eSignature adapter for Firefly ECM. This module provides a placeholder implementation of a Logalty eSignature provider following the same hexagonal architecture and integration patterns used by the DocuSign and Adobe Sign adapters.
 
 Status: Prototype (skeleton) — stubs in place ready for full API mapping.
