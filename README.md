@@ -1,54 +1,95 @@
-# Firefly ECM eSignature - Logalty
+# Firefly Framework - ECM eSignature - Logalty
 
 [![CI](https://github.com/fireflyframework/fireflyframework-ecm-esignature-logalty/actions/workflows/ci.yml/badge.svg)](https://github.com/fireflyframework/fireflyframework-ecm-esignature-logalty/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-21%2B-orange.svg)](https://openjdk.org)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-green.svg)](https://spring.io/projects/spring-boot)
 
-Logalty eSignature adapter for Firefly ECM. This module provides a placeholder implementation of a Logalty eSignature provider following the same hexagonal architecture and integration patterns used by the DocuSign and Adobe Sign adapters.
+> Logalty eSignature adapter for Firefly ECM.
 
-Status: Prototype (skeleton) — stubs in place ready for full API mapping.
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Configuration](#configuration)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Overview
+
+This module implements the Firefly ECM e-signature ports using Logalty as the provider. It provides `LogaltySignatureEnvelopeAdapter` which integrates with Logalty's certified electronic signature and communication platform.
+
+The adapter auto-configures via `LogaltyAdapterAutoConfiguration` and is activated by including this module on the classpath alongside the ECM core module.
 
 ## Features
-- eIDAS-compliant signature workflows (planned)
-- Envelope creation and sending (skeleton)
-- Webhook support (planned)
-- Resilience (CircuitBreaker + Retry)
 
-## Getting Started
+- Logalty integration for e-signature envelope management
+- Spring Boot auto-configuration for seamless activation
+- Implements Firefly ECM SignatureEnvelopePort
+- Configurable via application properties
+- Standalone provider library (include alongside fireflyframework-ecm)
 
-### Add dependency
+## Requirements
+
+- Java 21+
+- Spring Boot 3.x
+- Maven 3.9+
+- Logalty account and API credentials
+
+## Installation
+
 ```xml
 <dependency>
-  <groupId>org.fireflyframework</groupId>
-  <artifactId>fireflyframework-ecm-esignature-logalty</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+    <groupId>org.fireflyframework</groupId>
+    <artifactId>fireflyframework-ecm-esignature-logalty</artifactId>
+    <version>26.01.01</version>
 </dependency>
 ```
 
-### Enable provider
+## Quick Start
+
+The adapter is automatically activated when included on the classpath with the ECM core module:
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>org.fireflyframework</groupId>
+        <artifactId>fireflyframework-ecm</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.fireflyframework</groupId>
+        <artifactId>fireflyframework-ecm-esignature-logalty</artifactId>
+    </dependency>
+</dependencies>
+```
+
+## Configuration
+
 ```yaml
 firefly:
   ecm:
-    features:
-      esignature: true
     esignature:
-      provider: logalty
-```
-
-### Configure properties
-```yaml
-firefly:
-  ecm:
-    adapter:
       logalty:
-        client-id: ${LOGALTY_CLIENT_ID}
-        client-secret: ${LOGALTY_CLIENT_SECRET}
-        base-url: https://api-sandbox.logalty.com
-        api-version: v1
-        webhook-url: https://your.service/logalty/webhooks
-        webhook-secret: ${LOGALTY_WEBHOOK_SECRET}
-        sandbox-mode: true
+        base-url: https://api.logalty.es
+        api-key: your-api-key
 ```
 
-## Notes
-- SignatureProvider.LOGALTY is now available in fireflyframework-ecm-core
-- Full implementation pending Logalty API documentation and credentials
-- Placeholder methods ready for actual API integration
+## Documentation
+
+No additional documentation available for this project.
+
+## Contributing
+
+Contributions are welcome. Please read the [CONTRIBUTING.md](CONTRIBUTING.md) guide for details on our code of conduct, development process, and how to submit pull requests.
+
+## License
+
+Copyright 2024-2026 Firefly Software Solutions Inc.
+
+Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for details.
