@@ -9,11 +9,14 @@ import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.fireflyframework.ecm.port.document.DocumentContentPort;
+import org.fireflyframework.ecm.port.document.DocumentPort;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
@@ -42,7 +45,6 @@ import java.time.Duration;
 @Slf4j
 @AutoConfiguration
 @EnableConfigurationProperties(LogaltyAdapterProperties.class)
-@ComponentScan(basePackages = "org.fireflyframework.ecm.adapter.logalty")
 @ConditionalOnProperty(name = "firefly.ecm.esignature.provider", havingValue = "logalty")
 public class LogaltyAdapterAutoConfiguration {
 
@@ -139,5 +141,33 @@ public class LogaltyAdapterAutoConfiguration {
     public ObjectMapper logaltyObjectMapper() {
         return new ObjectMapper()
             .findAndRegisterModules();
+    }
+
+    /**
+     * Creates the Logalty signature envelope adapter.
+     *
+     * @param webClient the WebClient for Logalty API communication
+     * @param properties the Logalty adapter properties
+     * @param objectMapper the ObjectMapper for JSON serialization
+     * @param documentContentPort the document content port
+     * @param documentPort the document port
+     * @param circuitBreaker the circuit breaker for fault tolerance
+     * @param retry the retry mechanism for transient failures
+     * @return configured LogaltySignatureEnvelopeAdapter instance
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public LogaltySignatureEnvelopeAdapter logaltySignatureEnvelopeAdapter(
+            WebClient webClient,
+            LogaltyAdapterProperties properties,
+            ObjectMapper objectMapper,
+            DocumentContentPort documentContentPort,
+            DocumentPort documentPort,
+            @Qualifier("logaltyCircuitBreaker") CircuitBreaker circuitBreaker,
+            @Qualifier("logaltyRetry") Retry retry) {
+        return new LogaltySignatureEnvelopeAdapter(
+                webClient, properties, objectMapper,
+                documentContentPort, documentPort,
+                circuitBreaker, retry);
     }
 }
