@@ -13,6 +13,7 @@ import org.fireflyframework.ecm.port.document.DocumentContentPort;
 import org.fireflyframework.ecm.port.document.DocumentPort;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -44,6 +45,7 @@ import java.time.Duration;
  */
 @Slf4j
 @AutoConfiguration
+@ConditionalOnClass({WebClient.class, CircuitBreaker.class})
 @EnableConfigurationProperties(LogaltyAdapterProperties.class)
 @ConditionalOnProperty(name = "firefly.ecm.esignature.provider", havingValue = "logalty")
 public class LogaltyAdapterAutoConfiguration {
@@ -54,6 +56,7 @@ public class LogaltyAdapterAutoConfiguration {
      * @param properties the Logalty adapter properties
      * @return configured WebClient instance
      */
+    @ConditionalOnMissingBean
     @Bean
     public WebClient logaltyWebClient(LogaltyAdapterProperties properties) {
         log.info("Configuring Logalty WebClient with base URL: {}", properties.getBaseUrl());
@@ -76,6 +79,7 @@ public class LogaltyAdapterAutoConfiguration {
      * @param properties the Logalty adapter properties
      * @return configured CircuitBreaker instance
      */
+    @ConditionalOnMissingBean
     @Bean(name = "logaltyCircuitBreaker")
     public CircuitBreaker logaltyCircuitBreaker(LogaltyAdapterProperties properties) {
         log.info("Configuring Logalty CircuitBreaker with max retries: {}", properties.getMaxRetries());
@@ -107,6 +111,7 @@ public class LogaltyAdapterAutoConfiguration {
      * @param properties the Logalty adapter properties
      * @return configured Retry instance
      */
+    @ConditionalOnMissingBean
     @Bean(name = "logaltyRetry")
     public Retry logaltyRetry(LogaltyAdapterProperties properties) {
         log.info("Configuring Logalty Retry mechanism with max attempts: {}", properties.getMaxRetries());
@@ -137,6 +142,7 @@ public class LogaltyAdapterAutoConfiguration {
      *
      * @return ObjectMapper instance
      */
+    @ConditionalOnMissingBean
     @Bean
     public ObjectMapper logaltyObjectMapper() {
         return new ObjectMapper()
