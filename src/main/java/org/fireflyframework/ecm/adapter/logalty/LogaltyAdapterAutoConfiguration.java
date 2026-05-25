@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Firefly Software Solutions Inc.
+ * Copyright (c) 2024 Firefly Software Foundation.
  */
 package org.fireflyframework.ecm.adapter.logalty;
 
@@ -39,7 +39,7 @@ import java.time.Duration;
  * <p>The adapter is only activated when {@code firefly.ecm.esignature.provider=logalty}
  * is configured in application properties.</p>
  *
- * @author Firefly Software Solutions Inc.
+ * @author Firefly Software Foundation.
  * @version 1.0
  * @since 1.0
  */

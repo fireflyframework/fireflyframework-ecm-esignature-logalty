@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Firefly Software Solutions Inc.
+ * Copyright (c) 2024 Firefly Software Foundation.
  */
 package org.fireflyframework.ecm.adapter.logalty;
 
@@ -19,7 +19,7 @@ import java.time.Duration;
  * signature services compliant with eIDAS regulation. This adapter enables integration
  * with Logalty's signature platform for EU-compliant digital signatures.</p>
  *
- * @author Firefly Software Solutions Inc.
+ * @author Firefly Software Foundation.
  * @version 1.0
  * @since 1.0
  */

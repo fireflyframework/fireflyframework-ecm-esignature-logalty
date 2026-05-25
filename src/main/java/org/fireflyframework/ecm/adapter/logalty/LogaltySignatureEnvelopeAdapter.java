@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Firefly Software Solutions Inc.
+ * Copyright (c) 2024 Firefly Software Foundation.
  */
 package org.fireflyframework.ecm.adapter.logalty;
 
@@ -51,7 +51,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p><strong>Note:</strong> This is a placeholder implementation. Full integration requires
  * access to Logalty's API documentation and credentials.</p>
  *
- * @author Firefly Software Solutions Inc.
+ * @author Firefly Software Foundation.
  * @version 1.0
  * @since 1.0
  */
